@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "306328975477",
+    "project_id": "awesome-e-commerce-app",
+    "storage_bucket": "awesome-e-commerce-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:306328975477:android:fe6bf94e0ff6953504a03c",
+        "android_client_info": {
+          "package_name": "com.mamunsproject.awesome_e_commerceapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "306328975477-d0ajgr7vbl2vsmggfnh05qtbvqf32csh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCFaZKNZWsL23Dz77g52pi3vJ4ZhbSDcmI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "306328975477-d0ajgr7vbl2vsmggfnh05qtbvqf32csh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

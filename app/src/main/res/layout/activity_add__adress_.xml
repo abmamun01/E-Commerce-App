@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Activity.Add_Adress_Activity">
+
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout5"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/Theme.Awesome_E_CommerceApp.AppBarOverlay"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/Theme.Awesome_E_CommerceApp.PopupOverlay" />
+
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+
+    <ScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:nestedScrollingEnabled="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/appBarLayout5">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:layout_marginTop="16dp"
+                android:layout_gravity="center"
+                android:layout_marginBottom="16dp"
+                android:src="@drawable/ic_map"/>
+
+            <EditText
+                android:id="@+id/city"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:textColor="@color/red"
+                android:backgroundTint="@color/red"
+
+                android:inputType="textPersonName"
+                android:hint="City*" />
+
+
+            <EditText
+                android:backgroundTint="@color/red"
+
+                android:id="@+id/locality"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:layout_marginTop="8dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:textColor="@color/red"
+                android:inputType="textMultiLine"
+                android:lines="3"
+                android:isScrollContainer="true"
+                android:gravity="start"
+                android:hint="Locality , area or street*" />
+
+
+            <EditText
+                android:id="@+id/flatNo"
+                android:isScrollContainer="true"
+                android:backgroundTint="@color/red"
+
+                android:layout_marginTop="8dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:textColor="@color/red"
+                android:inputType="textMultiLine"
+                android:lines="3"
+                android:gravity="start"
+                android:hint="Flat no. Building Name*" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="8dp"
+                >
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="Pincode*"
+                    android:id="@+id/pinCode"
+                    android:backgroundTint="@color/red"
+
+                    android:inputType="number"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="8dp"
+                    android:textColor="@color/red"/>
+
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="State*"
+                    android:backgroundTint="@color/red"
+
+                    android:inputType="textPersonName"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="16dp"
+                    android:textColor="@color/red"/>
+
+
+            </LinearLayout>
+
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginTop="8dp"
+                android:backgroundTint="@color/red"
+
+                android:hint="Landmark(Optional)"
+                android:inputType="textPersonName"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="16dp"
+                android:id="@+id/landMark"
+                android:textColor="@color/red"/>
+
+            <View
+                android:id="@+id/divider10"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+
+                android:background="?android:attr/listDivider" />
+
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="Name*"
+                android:layout_marginTop="8dp"
+                android:backgroundTint="@color/red"
+
+                android:id="@+id/name"
+                android:inputType="textPersonName"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="16dp"
+                android:textColor="@color/red"/>
+
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginTop="8dp"
+                android:backgroundTint="@color/red"
+
+                android:hint="Mobile Number"
+                android:id="@+id/mobileNo"
+                android:inputType="number"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="16dp"
+                android:textColor="@color/red"/>
+
+
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginTop="8dp"
+                android:backgroundTint="@color/red"
+
+                android:hint="Alternet Mobile Number (Option)"
+                android:inputType="textPersonName"
+                android:layout_marginStart="8dp"
+                android:id="@+id/alternate_mobile_no"
+                android:layout_marginEnd="16dp"
+                android:textColor="@color/red"/>
+
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/save_button"
+
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:background="@color/red"
+                android:textColor="@color/white"
+                android:text="save"
+                android:backgroundTint="@color/red"
+
+                android:layout_margin="16dp"/>
+
+
+        </LinearLayout>
+    </ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>
