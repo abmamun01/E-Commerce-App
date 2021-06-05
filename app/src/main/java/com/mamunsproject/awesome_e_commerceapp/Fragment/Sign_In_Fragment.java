@@ -39,6 +39,7 @@ public class Sign_In_Fragment extends Fragment {
     String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+.[a-z]+";
     private ProgressBar progressBar;
     private TextView forgotPassword;
+    public static boolean disableCloseBtn = false;
 
 
     @Override
@@ -57,7 +58,7 @@ public class Sign_In_Fragment extends Fragment {
         password = view.findViewById(R.id.sign_in_password);
         firebaseAuth = FirebaseAuth.getInstance();
         progressBar = view.findViewById(R.id.sign_in_progressbar);
-        forgotPassword=view.findViewById(R.id.sign_in_forgot_password);
+        forgotPassword = view.findViewById(R.id.sign_in_forgot_password);
 
 
 //=======================================Initialization=========================================
@@ -125,12 +126,11 @@ public class Sign_In_Fragment extends Fragment {
         });
 
 
-
         forgotPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                onResetPasswordFragment=true;
+                onResetPasswordFragment = true;
 
                 FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
                 transaction.setCustomAnimations(R.anim.slide_from_right, R.anim.slide_out_from_right);
@@ -139,17 +139,11 @@ public class Sign_In_Fragment extends Fragment {
         });
 
 
-
-
-
-
-
-
-
-
-
-
-
+        if (disableCloseBtn) {
+            closeButton.setVisibility(View.GONE);
+        } else {
+            closeButton.setVisibility(View.VISIBLE);
+        }
 
 
         return view;
@@ -216,7 +210,14 @@ public class Sign_In_Fragment extends Fragment {
 
 
     private void mainIntent() {
-        startActivity(new Intent(getContext(), MainActivity.class));
+        if (disableCloseBtn){
+            disableCloseBtn=false;
+
+        }else {
+            startActivity(new Intent(getContext(), MainActivity.class));
+            disableCloseBtn = false;
+        }
         getActivity().finish();
+
     }
 }

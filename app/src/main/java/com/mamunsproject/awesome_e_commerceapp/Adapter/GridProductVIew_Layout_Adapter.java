@@ -53,8 +53,12 @@ public class GridProductVIew_Layout_Adapter extends BaseAdapter {
              view.setOnClickListener(new View.OnClickListener() {
                  @Override
                  public void onClick(View v) {
+
                      Intent productDetailsIntent=new Intent(parent.getContext(), Product_Details_Activity.class);
+                     productDetailsIntent.putExtra("PRODUCT_ID",horizontal_product_scrollModelList.get(position).getProduct_ID());
+
                      parent.getContext().startActivity(productDetailsIntent);
+
                  }
              });
 
@@ -65,7 +69,7 @@ public class GridProductVIew_Layout_Adapter extends BaseAdapter {
 
 
             Glide.with(parent.getContext()).load(horizontal_product_scrollModelList.get(position).getProductImage())
-                    .apply(new RequestOptions().placeholder(R.drawable.ic_rounded_home)).into(productImage);
+                    .apply(new RequestOptions().placeholder(R.drawable.ic_placeholder_big)).into(productImage);
             productTitle.setText(horizontal_product_scrollModelList.get(position).getProductTitle());
             productDescription.setText(horizontal_product_scrollModelList.get(position).getProductDescription());
             productPrice.setText("Tk."+horizontal_product_scrollModelList.get(position).getProductPrice()+"/-");

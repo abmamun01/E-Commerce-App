@@ -10,11 +10,8 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.app.Dialog;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -27,9 +24,9 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.airbnb.lottie.LottieAnimationView;
-import com.bumptech.glide.Glide;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.mamunsproject.awesome_e_commerceapp.Activity.Register_Activity;
 import com.mamunsproject.awesome_e_commerceapp.Fragment.Home_Fragment;
 import com.mamunsproject.awesome_e_commerceapp.Fragment.MY_Order_Fragment;
@@ -37,6 +34,8 @@ import com.mamunsproject.awesome_e_commerceapp.Fragment.My_Account_Fragment;
 import com.mamunsproject.awesome_e_commerceapp.Fragment.My_Rewards_Fragment;
 import com.mamunsproject.awesome_e_commerceapp.Fragment.My_WishList_Fragment;
 import com.mamunsproject.awesome_e_commerceapp.Fragment.My_cart_Fragment;
+import com.mamunsproject.awesome_e_commerceapp.Fragment.Sign_In_Fragment;
+import com.mamunsproject.awesome_e_commerceapp.Fragment.Sign_Up_Fragment;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -53,15 +52,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private static final int ACCOUNT_FRAGMENT = 5;
     public static Boolean showCart = false;
 
-
     private Window window;
     private Toolbar toolbar;
-
 
     private static int current_Fragment = -1;
     private NavigationView navigationView;
     private ImageView actionBar_Logo;
-    DrawerLayout drawerLayout;
+    public static DrawerLayout drawerLayout;
+    private Dialog signInDialog;
+    private FirebaseUser currentUser;
 
 
     @Override
@@ -74,7 +73,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         actionBar_Logo = findViewById(R.id.actionbar_logo);
 
 
-        drawerLayout = findViewById(R.id.drawer_layout);
 
 
         //=========== For Changing StatusBar Color in Different Layout ==============================
@@ -84,7 +82,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         //=========== For Changing StatusBar Color in Different Layout ==============================
 
-
+        drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.bringToFront();
 
@@ -110,6 +108,53 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
 
+        signInDialog = new Dialog(MainActivity.this);
+        signInDialog.setContentView(R.layout.sign_in_dialauge);
+        signInDialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        Button dialogSignInButton = signInDialog.findViewById(R.id.signInButton);
+        Button dialogSignUpButton = signInDialog.findViewById(R.id.signUpButton);
+
+        signInDialog.setCancelable(true);
+
+        Intent registerIntent = new Intent(MainActivity.this, Register_Activity.class);
+        dialogSignInButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Sign_In_Fragment.disableCloseBtn = true;
+                Sign_Up_Fragment.disableCloseButton=true;
+
+                signInDialog.dismiss();
+                setSignUpFragment = false;
+                startActivity(registerIntent);
+
+            }
+        });
+
+        dialogSignUpButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Sign_Up_Fragment.disableCloseButton = true;
+                Sign_In_Fragment.disableCloseBtn=true;
+
+
+                signInDialog.dismiss();
+                setSignUpFragment = true;
+                startActivity(registerIntent);
+            }
+        });
+    }
+
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        currentUser= FirebaseAuth.getInstance().getCurrentUser();
+        if (currentUser == null) {
+            navigationView.getMenu().getItem(navigationView.getMenu().size() - 1).setEnabled(false);
+        } else {
+            navigationView.getMenu().getItem(navigationView.getMenu().size() - 1).setEnabled(false);
+        }
 
     }
 
@@ -170,42 +215,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         } else if (id == R.id.mainCartIcon) {
 
-
-            Dialog singINDialOG = new Dialog(MainActivity.this);
-            singINDialOG.setContentView(R.layout.sign_in_dialauge);
-            singINDialOG.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            Button dialogSignInButton = singINDialOG.findViewById(R.id.signInButton);
-            Button dialogSignUpButton = singINDialOG.findViewById(R.id.signUpButton);
-
-            singINDialOG.setCancelable(true);
-
-            Intent registerIntent = new Intent(MainActivity.this, Register_Activity.class);
-            dialogSignInButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                    singINDialOG.dismiss();
-                    setSignUpFragment = false;
-                    startActivity(registerIntent);
-
-                }
-            });
-
-            dialogSignUpButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    singINDialOG.dismiss();
-
-                    setSignUpFragment = true;
-                    startActivity(registerIntent);
-                }
-            });
-
-            singINDialOG.show();
+            if (currentUser == null ){
+                signInDialog.show();
+            }else {
+                //todo:cart
+                gotoFragment("My Cart", new My_cart_Fragment(), CART_FRAGMENT);
+            }
 
 
-            //todo:cart
-            //  gotoFragment("My Cart", new My_cart_Fragment(), CART_FRAGMENT);
+
             return true;
         } else if (id == android.R.id.home) {
             if (showCart) {
@@ -217,25 +235,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return super.onOptionsItemSelected(item);
     }
 
-    private void gotoFragment(String title, Fragment fragment, int fragmentNo) {
-        //Action bar r sob icon remove kore dibe
-        actionBar_Logo.setVisibility(View.INVISIBLE);
-        getSupportActionBar().setDisplayShowTitleEnabled(true);
-        getSupportActionBar().setTitle(title);
-        invalidateOptionsMenu();
-        setFragment(fragment, fragmentNo);
-
-        if (fragmentNo == CART_FRAGMENT) {
-            navigationView.getMenu().getItem(3).setChecked(true);
-
-        }
-
-    }
 
 
     @SuppressWarnings("StateWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(@NonNull @NotNull MenuItem item) {
+
+        if (currentUser != null){
+
 
         int id = item.getItemId();
 
@@ -271,14 +278,26 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         } else if (id == R.id.nav_signOUt) {
             Toast.makeText(getApplicationContext(), "item" + item, Toast.LENGTH_SHORT).show();
+            FirebaseAuth.getInstance().signOut();
+            startActivity(new Intent(MainActivity.this,Register_Activity.class));
+            finish();
+            
 
         } else if (id == R.id.nav_my_account) {
 
             gotoFragment("My Account", new My_Account_Fragment(), ACCOUNT_FRAGMENT);
         }
+        }else {
 
+            drawerLayout.closeDrawer(GravityCompat.START);
+            signInDialog.show();
+            return false;
+        }
+
+        drawerLayout.closeDrawer(GravityCompat.START);
         return false;
     }
+
 
 
     private void setFragment(Fragment fragment, int fragmentNo) {
@@ -302,4 +321,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
     }
+
+    private void gotoFragment(String title, Fragment fragment, int fragmentNo) {
+        //Action bar r sob icon remove kore dibe
+        actionBar_Logo.setVisibility(View.INVISIBLE);
+        getSupportActionBar().setDisplayShowTitleEnabled(true);
+        getSupportActionBar().setTitle(title);
+        invalidateOptionsMenu();
+        setFragment(fragment, fragmentNo);
+
+        if (fragmentNo == CART_FRAGMENT) {
+            navigationView.getMenu().getItem(3).setChecked(true);
+
+        }
+
+    }
+
 }

@@ -1,4 +1,4 @@
-  package com.mamunsproject.awesome_e_commerceapp.Fragment;
+package com.mamunsproject.awesome_e_commerceapp.Fragment;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -33,6 +33,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.mamunsproject.awesome_e_commerceapp.MainActivity;
 import com.mamunsproject.awesome_e_commerceapp.R;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -49,6 +51,7 @@ public class Sign_Up_Fragment extends Fragment {
     private Button signUpButton;
     private ProgressBar progressBar;
     private String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+.[a-z]+";
+    public static boolean disableCloseButton = false;
 
 
     @Override
@@ -69,7 +72,7 @@ public class Sign_Up_Fragment extends Fragment {
         progressBar = view.findViewById(R.id.sign_up_progressBar);
         signUpButton = view.findViewById(R.id.signup_btn);
         firebaseAuth = FirebaseAuth.getInstance();
-        firebaseFirestore=FirebaseFirestore.getInstance();
+        firebaseFirestore = FirebaseFirestore.getInstance();
 //=======================================Initialization=========================================        clickListener();
 
 
@@ -174,21 +177,26 @@ public class Sign_Up_Fragment extends Fragment {
 
 //=======================================OnClick Listener=========================================        clickListener();
 
+        if (disableCloseButton) {
+            closeButton.setVisibility(View.GONE);
+        } else {
+            closeButton.setVisibility(View.VISIBLE);
+        }
+
 
         return view;
 
     }
 
 
-
     @SuppressLint("ResourceAsColor")
     private void checkEmailAndPassword() {
 
         //===========For Changing Error Icon=========
-        Drawable customErrorIcon=getResources().getDrawable(R.drawable.ic_attention);
+        Drawable customErrorIcon = getResources().getDrawable(R.drawable.ic_attention);
         customErrorIcon.setBounds
-                (0,0,customErrorIcon.getIntrinsicWidth()
-                        ,customErrorIcon.getIntrinsicHeight());
+                (0, 0, customErrorIcon.getIntrinsicWidth()
+                        , customErrorIcon.getIntrinsicHeight());
 
 
         if (email.getText().toString().matches(emailPattern)) {
@@ -207,41 +215,57 @@ public class Sign_Up_Fragment extends Fragment {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
 
-                                Map<Object,String> userData=new HashMap<>();
-                                userData.put("FullName",fullName.getText().toString());
+                                Map<String, Object> userData = new HashMap<>();
+                                userData.put("FullName", fullName.getText().toString());
 
-                                firebaseFirestore.collection("User")
-                                        .add(userData)
-                                        .addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+                                firebaseFirestore.collection("USERS").document(firebaseAuth.getUid())
+                                        .set(userData)
+                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
                                             @Override
-                                            public void onComplete(@NonNull Task<DocumentReference> task) {
+                                            public void onComplete(@NonNull @NotNull Task<Void> task) {
 
-                                                if (task.isSuccessful()){
+                                                if (task.isSuccessful()) {
+                                                    Map<String, Object> listSize = new HashMap<>();
+                                                    listSize.put("list_size", (long) 0);
 
-                                                    mainIntent();
-                                                }else {
+                                                    firebaseFirestore.collection("USERS").document(firebaseAuth.getUid())
+                                                            .collection("USER_DATA").document("MY_WISHLIST")
+                                                            .set(listSize).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                        @Override
+                                                        public void onComplete(@NonNull @NotNull Task<Void> task) {
+                                                            if (task.isSuccessful()) {
 
-                                                    signUpButton.setEnabled(true);
-                                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                                                        signUpButton.setTextColor(R.color.yellow_50);
-                                                        signUpButton.setBackgroundColor(R.color.blue_grey_50);                                    }
-                                                    progressBar.setVisibility(View.INVISIBLE);
+                                                                mainIntent();
+
+                                                            } else {
+                                                                signUpButton.setEnabled(true);
+                                                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                                                    signUpButton.setTextColor(R.color.yellow_50);
+                                                                    signUpButton.setBackgroundColor(R.color.blue_grey_50);
+                                                                }
+                                                                progressBar.setVisibility(View.INVISIBLE);
+                                                                String error = task.getException().getMessage();
+                                                                Toast.makeText(getContext(), error, Toast.LENGTH_SHORT).show();
+                                                            }
+                                                        }
+                                                    });
+
+                                                } else {
+
                                                     String error = task.getException().getMessage();
                                                     Toast.makeText(getContext(), error, Toast.LENGTH_SHORT).show();
                                                 }
                                             }
                                         });
-
-
                             }
                         });
             } else {
-                confirmPassword.setError("Password Doesn't Match!",customErrorIcon);
+                confirmPassword.setError("Password Doesn't Match!", customErrorIcon);
 
 
             }
         } else {
-            email.setError("Invalid Email!",customErrorIcon);
+            email.setError("Invalid Email!", customErrorIcon);
 
         }
 
@@ -250,9 +274,9 @@ public class Sign_Up_Fragment extends Fragment {
 
     @SuppressLint("ResourceAsColor")
     private void checkInput() {
-        if (!email.getText().toString().isEmpty()){
-            if (!fullName.getText().toString().isEmpty()){
-                if (!password.getText().toString().isEmpty()&&password.length()>=8){
+        if (!email.getText().toString().isEmpty()) {
+            if (!fullName.getText().toString().isEmpty()) {
+                if (!password.getText().toString().isEmpty() && password.length() >= 8) {
                     signUpButton.setEnabled(true);
                     signUpButton.setTextColor(R.color.green_600);
                     signUpButton.setBackgroundColor(R.color.grey_3);
@@ -260,7 +284,7 @@ public class Sign_Up_Fragment extends Fragment {
 
                 }
             }
-        }else {
+        } else {
             signUpButton.setEnabled(false);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 signUpButton.setTextColor(Color.argb(50f, 15, 245, 255));
@@ -268,15 +292,21 @@ public class Sign_Up_Fragment extends Fragment {
         }
 
 
-
-        }
-
-
-        private void mainIntent(){
-            startActivity(new Intent(getContext(), MainActivity.class));
-            getActivity().finish();
-        }
     }
+
+
+    private void mainIntent() {
+        if (disableCloseButton) {
+            disableCloseButton = false;
+
+        } else {
+            startActivity(new Intent(getContext(), MainActivity.class));
+            disableCloseButton = false;
+        }
+        getActivity().finish();
+
+    }
+}
 
 
 

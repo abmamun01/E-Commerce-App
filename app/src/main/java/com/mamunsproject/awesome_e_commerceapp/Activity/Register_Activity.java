@@ -47,6 +47,10 @@ public class Register_Activity extends AppCompatActivity {
     public boolean onKeyDown(int keyCode, KeyEvent event) {
 
         if (keyCode==event.KEYCODE_BACK){
+
+            Sign_Up_Fragment.disableCloseButton =false;
+            Sign_In_Fragment.disableCloseBtn=false;
+
             if (onResetPasswordFragment) {
                 onResetPasswordFragment=false;
                 FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();

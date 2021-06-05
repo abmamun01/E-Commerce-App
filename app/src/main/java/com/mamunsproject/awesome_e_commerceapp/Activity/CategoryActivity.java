@@ -17,6 +17,7 @@ import com.mamunsproject.awesome_e_commerceapp.Model.CategoryModel;
 import com.mamunsproject.awesome_e_commerceapp.Model.HomePage_Model;
 import com.mamunsproject.awesome_e_commerceapp.Model.Horizontal_Product_scrollModel;
 import com.mamunsproject.awesome_e_commerceapp.Model.SliderModel;
+import com.mamunsproject.awesome_e_commerceapp.Model.Wishlist_Model;
 import com.mamunsproject.awesome_e_commerceapp.R;
 
 import java.util.ArrayList;
@@ -29,6 +30,7 @@ public class CategoryActivity extends AppCompatActivity {
 
     private RecyclerView categoryRecyclerview;
     private HomePage_Adapter adapter ;
+    private List<HomePage_Model > homePageModelFakeList=new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +47,36 @@ public class CategoryActivity extends AppCompatActivity {
 
 
 
+
+        // HOME PAGE FAKE LIST
+
+        List<SliderModel> sliderModelFakeList =new ArrayList<>();
+
+        sliderModelFakeList.add(new SliderModel("null","#ffffff"));
+        sliderModelFakeList.add(new SliderModel("null","#ffffff"));
+        sliderModelFakeList.add(new SliderModel("null","#ffffff"));
+        sliderModelFakeList.add(new SliderModel("null","#ffffff"));
+        sliderModelFakeList.add(new SliderModel("null","#ffffff"));
+
+
+        List<Horizontal_Product_scrollModel> horizontal_product_scrollModelFakeList =new ArrayList<>();
+
+        horizontal_product_scrollModelFakeList.add(new Horizontal_Product_scrollModel("","","","",""));
+        horizontal_product_scrollModelFakeList.add(new Horizontal_Product_scrollModel("","","","",""));
+        horizontal_product_scrollModelFakeList.add(new Horizontal_Product_scrollModel("","","","",""));
+        horizontal_product_scrollModelFakeList.add(new Horizontal_Product_scrollModel("","","","",""));
+        horizontal_product_scrollModelFakeList.add(new Horizontal_Product_scrollModel("","","","",""));
+        horizontal_product_scrollModelFakeList.add(new Horizontal_Product_scrollModel("","","","",""));
+        horizontal_product_scrollModelFakeList.add(new Horizontal_Product_scrollModel("","","","",""));
+
+
+
+
+        homePageModelFakeList.add(new HomePage_Model(0,sliderModelFakeList));
+        homePageModelFakeList.add(new HomePage_Model(1,"","#ffffff"));
+        homePageModelFakeList.add(new HomePage_Model(2,"","#ffffff",horizontal_product_scrollModelFakeList,new ArrayList<Wishlist_Model>()));
+        homePageModelFakeList.add(new HomePage_Model(3,"","#ffffff",horizontal_product_scrollModelFakeList ));
+        // HOME PAGE FAKE LIST
 
 /////============================ Banner Slider==============================
 
@@ -82,7 +114,6 @@ public class CategoryActivity extends AppCompatActivity {
 
 
 
-        List<Horizontal_Product_scrollModel> horizontal_product_scrollModelList = new ArrayList<>();
 
 //        horizontal_product_scrollModelList.add(new Horizontal_Product_scrollModel(R.drawable.iphone, "I Phone X", "A13 Bionic", "999$"));
 //        horizontal_product_scrollModelList.add(new Horizontal_Product_scrollModel(R.drawable.iphone2, "I Phone 11", "A13 Bionic", "999$"));
@@ -109,6 +140,9 @@ public class CategoryActivity extends AppCompatActivity {
 
         categoryRecyclerview.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
 
+        adapter=new HomePage_Adapter(homePageModelFakeList);
+
+
         //        homePage_modelList.add(new HomePage_Model(0, sliderModelsList));
 //        homePage_modelList.add(new HomePage_Model(1, R.drawable.iphone, "#000000"));
 //        homePage_modelList.add(new HomePage_Model(2, "Deals Of The Day", horizontal_product_scrollModelList));
@@ -131,17 +165,11 @@ public class CategoryActivity extends AppCompatActivity {
 
             loadedCategoriesNames.add(title.toUpperCase());
             lists.add(new ArrayList<HomePage_Model>());
-            adapter = new HomePage_Adapter(lists.get(loadedCategoriesNames.size()-1));
-            DB_Queries.loadFragmentData(adapter, this,loadedCategoriesNames.size()-1,title);
+            DB_Queries.loadFragmentData(categoryRecyclerview, this,loadedCategoriesNames.size()-1,title);
 
         }else {
             adapter = new HomePage_Adapter(lists.get(listPosition));
-
-
-
         }
-
-
         categoryRecyclerview.setAdapter(adapter);
         adapter.notifyDataSetChanged();
         //////////////////////////////////////////////////////////////////////////////////
