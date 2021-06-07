@@ -74,7 +74,7 @@ public class Product_Details_Activity extends AppCompatActivity {
     private TextView rewardBody;
     private String productDescription;
     private String productOtherDetails;
-    private List<ProductSpecificationModel> productSpecificationModelsList = new ArrayList<>();
+    private final List<ProductSpecificationModel> productSpecificationModelsList = new ArrayList<>();
     private TextView productOnlyDescriptionBody;
     private TextView totalRatingsFigure;
     private TextView averageRating;
@@ -304,21 +304,22 @@ public class Product_Details_Activity extends AppCompatActivity {
         addToWishListButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 if (currentUser == null) {
                     signInDialog.show();
                 } else {
 
                     addToWishListButton.setEnabled(false);
 
-
                     if (ALREADY_ADDED_TO_WISH_LIST) {
                         int index = DB_Queries.wishList.indexOf(productID);
                         DB_Queries.removeFromWishList(index, Product_Details_Activity.this);
 
-                        ALREADY_ADDED_TO_WISH_LIST = false;
+                        //ALREADY_ADDED_TO_WISH_LIST = false;
                         addToWishListButton.setSupportImageTintList(ColorStateList.valueOf(Color.parseColor("#9e9e9e")));
                     } else {
 
+                        addToWishListButton.setSupportImageTintList(getResources().getColorStateList(R.color.red));
                         Map<String, Object> addProduct = new HashMap<>();
                         addProduct.put("product_ID_" + String.valueOf(DB_Queries.wishList.size()), productID);
 
@@ -354,13 +355,14 @@ public class Product_Details_Activity extends AppCompatActivity {
                                                 DB_Queries.wishList.add(productID);
                                                 Toast.makeText(Product_Details_Activity.this, "Added Successfully!", Toast.LENGTH_SHORT).show();
 
+                                                addToWishListButton.setEnabled(true);
 
                                             } else {
-
+                                                addToWishListButton.setEnabled(true);
                                                 addToWishListButton.setSupportImageTintList(ColorStateList.valueOf(Color.parseColor("#9e9e9e")));
                                                 Toast.makeText(Product_Details_Activity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                                             }
-                                            addToWishListButton.setEnabled(false);
+                                            //  addToWishListButton.setEnabled(false);
                                         }
                                     });
 

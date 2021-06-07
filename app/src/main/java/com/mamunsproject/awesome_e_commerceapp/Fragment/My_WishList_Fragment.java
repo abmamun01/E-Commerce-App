@@ -61,12 +61,10 @@ public class My_WishList_Fragment extends Fragment {
         }else {
             loadingDialog.dismiss();
         }
-         wishlist_adapter=new Wishlist_Adapter(DB_Queries.wishlist_modelList,true);
+
+        wishlist_adapter=new Wishlist_Adapter(DB_Queries.wishlist_modelList,true);
         wishListRecyclerview.setAdapter(wishlist_adapter);
         wishlist_adapter.notifyDataSetChanged();
-
-
-
 
 
 

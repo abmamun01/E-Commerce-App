@@ -246,7 +246,7 @@ public class DB_Queries {
                     if (wishlist_modelList.size()!=0){
                         wishlist_modelList.remove(index);
                         //For Refresh
-                        My_WishList_Fragment.wishlist_adapter.notifyDataSetChanged();
+//                        My_WishList_Fragment.wishlist_adapter.notifyDataSetChanged();
                     }
                     Product_Details_Activity.ALREADY_ADDED_TO_WISH_LIST=false;
                     Toast.makeText(context, "Removed Successfully!", Toast.LENGTH_SHORT).show();
@@ -255,7 +255,8 @@ public class DB_Queries {
                     Product_Details_Activity.addToWishListButton.setSupportImageTintList(context.getResources().getColorStateList(R.color.red_A400));
                     Toast.makeText(context, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                 }
-                Product_Details_Activity.addToWishListButton.setEnabled(true);
+                
+               Product_Details_Activity.addToWishListButton.setEnabled(true);
 
             }
         });
