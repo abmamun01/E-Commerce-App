@@ -81,7 +81,7 @@ public class Product_Details_Activity extends AppCompatActivity {
     private LinearLayout addToCartButton;
     private LinearLayout couponRedeemptionLayout;
     private FirebaseUser currentUser;
-    private String productID;
+    public static String productID;
     private DocumentSnapshot documentSnapshot;
 
 
@@ -279,6 +279,7 @@ public class Product_Details_Activity extends AppCompatActivity {
                         addToWishListButton.setSupportImageTintList(getResources().getColorStateList(R.color.red_A400));
 
                     } else {
+                        Product_Details_Activity.addToWishListButton.setSupportImageTintList(ColorStateList.valueOf(Color.parseColor("#9e9e9e")));
                         ALREADY_ADDED_TO_WISH_LIST = false;
                         loadingDialog.dismiss();
                     }
@@ -325,7 +326,7 @@ public class Product_Details_Activity extends AppCompatActivity {
 
 
                         firebaseFirestore.collection("USERS").document(currentUser.getUid()).collection("USER_DATA")
-                                .document("MY_WISHLIST").set(addProduct).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                .document("MY_WISHLIST").update(addProduct).addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull @NotNull Task<Void> task) {
                                 if (task.isSuccessful()) {

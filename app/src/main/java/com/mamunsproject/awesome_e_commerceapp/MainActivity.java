@@ -28,6 +28,7 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.mamunsproject.awesome_e_commerceapp.Activity.Register_Activity;
+import com.mamunsproject.awesome_e_commerceapp.DB_Queries.DB_Queries;
 import com.mamunsproject.awesome_e_commerceapp.Fragment.Home_Fragment;
 import com.mamunsproject.awesome_e_commerceapp.Fragment.MY_Order_Fragment;
 import com.mamunsproject.awesome_e_commerceapp.Fragment.My_Account_Fragment;
@@ -276,9 +277,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             gotoFragment("My WishList", new My_WishList_Fragment(), MY_WISHLIST_FRAGMENT);
 
-        } else if (id == R.id.nav_signOUt) {
+        } else if (id == R.id.nav_sign_out) {
             Toast.makeText(getApplicationContext(), "item" + item, Toast.LENGTH_SHORT).show();
             FirebaseAuth.getInstance().signOut();
+            DB_Queries.clearData();
             startActivity(new Intent(MainActivity.this,Register_Activity.class));
             finish();
             

@@ -2,6 +2,8 @@ package com.mamunsproject.awesome_e_commerceapp.DB_Queries;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -186,6 +188,21 @@ public class DB_Queries {
                     for (long x = 0; x < (long) task.getResult().get("list_size"); x++) {
                         wishList.add(task.getResult().get("product_ID_" + x).toString());
 
+                        if (DB_Queries.wishList.contains(Product_Details_Activity.productID)) {
+                            Product_Details_Activity.ALREADY_ADDED_TO_WISH_LIST = true;
+                            if (Product_Details_Activity.addToWishListButton != null) {
+                                Product_Details_Activity.addToWishListButton.setSupportImageTintList(context.getResources().getColorStateList(R.color.red_A400));
+                            }
+                        } else {
+
+                            if (Product_Details_Activity.addToWishListButton != null) {
+                                Product_Details_Activity.addToWishListButton.setSupportImageTintList(ColorStateList.valueOf(Color.parseColor("#9e9e9e")));
+                            }
+
+                            Product_Details_Activity.ALREADY_ADDED_TO_WISH_LIST = false;
+                        }
+
+
                         if (loadProductData) {
 
                             firebaseFirestore.collection("PRODUCTS").document(task.getResult().get("product_ID_" + x).toString())
@@ -226,40 +243,53 @@ public class DB_Queries {
         });
     }
 
-    public static void removeFromWishList(int index,Context context){
+    public static void removeFromWishList(int index, Context context) {
 
         wishList.remove(index);
-        Map<String, Object> updateWishList=new HashMap<>();
+        Map<String, Object> updateWishList = new HashMap<>();
 
-        for (int x =0;x<wishList.size();x++){
-            updateWishList.put("product_ID_"+x,wishList.get(x));
+        for (int x = 0; x < wishList.size(); x++) {
+            updateWishList.put("product_ID_" + x, wishList.get(x));
         }
-        updateWishList.put("list_size",(long)wishList.size());
+        updateWishList.put("list_size", (long) wishList.size());
 
         firebaseFirestore.collection("USERS").document(FirebaseAuth.getInstance().getUid())
                 .collection("USER_DATA").document("MY_WISHLIST")
                 .set(updateWishList).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull @NotNull Task<Void> task) {
-                if (task.isSuccessful()){
+                if (task.isSuccessful()) {
 
-                    if (wishlist_modelList.size()!=0){
+                    if (wishlist_modelList.size() != 0) {
                         wishlist_modelList.remove(index);
                         //For Refresh
-//                        My_WishList_Fragment.wishlist_adapter.notifyDataSetChanged();
+                        My_WishList_Fragment.wishlist_adapter.notifyDataSetChanged();
                     }
-                    Product_Details_Activity.ALREADY_ADDED_TO_WISH_LIST=false;
-                    Toast.makeText(context, "Removed Successfully!", Toast.LENGTH_SHORT).show();
-                }else {
 
-                    Product_Details_Activity.addToWishListButton.setSupportImageTintList(context.getResources().getColorStateList(R.color.red_A400));
+                    Product_Details_Activity.ALREADY_ADDED_TO_WISH_LIST = false;
+                    Toast.makeText(context, "Removed Successfully!", Toast.LENGTH_SHORT).show();
+                } else {
+                    if (Product_Details_Activity.addToWishListButton != null) {
+                        Product_Details_Activity.addToWishListButton.setSupportImageTintList(context.getResources().getColorStateList(R.color.red_A400));
+                    }
                     Toast.makeText(context, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                 }
-                
-               Product_Details_Activity.addToWishListButton.setEnabled(true);
 
+                if (Product_Details_Activity.addToWishListButton != null) {
+
+                    Product_Details_Activity.addToWishListButton.setEnabled(true);
+                }
             }
         });
+    }
+
+    public static void clearData() {
+
+        categoryModelList.clear();
+        lists.clear();
+        loadedCategoriesNames.clear();
+        wishList.clear();
+        wishlist_modelList.clear();
     }
 
 }

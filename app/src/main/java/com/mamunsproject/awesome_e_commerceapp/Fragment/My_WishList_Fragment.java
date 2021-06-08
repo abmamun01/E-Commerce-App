@@ -26,7 +26,7 @@ public class My_WishList_Fragment extends Fragment {
 
     private RecyclerView wishListRecyclerview;
     private Dialog loadingDialog;
-    public static Wishlist_Adapter wishlist_adapter;
+    public static Wishlist_Adapter wishlist_adapter=new Wishlist_Adapter(DB_Queries.wishlist_modelList,true);
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -62,7 +62,7 @@ public class My_WishList_Fragment extends Fragment {
             loadingDialog.dismiss();
         }
 
-        wishlist_adapter=new Wishlist_Adapter(DB_Queries.wishlist_modelList,true);
+     //   wishlist_adapter=new Wishlist_Adapter(DB_Queries.wishlist_modelList,true);
         wishListRecyclerview.setAdapter(wishlist_adapter);
         wishlist_adapter.notifyDataSetChanged();
 
