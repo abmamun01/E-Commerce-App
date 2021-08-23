@@ -1,6 +1,7 @@
 package com.mamunsproject.awesome_e_commerceapp.Model;
 
 public class Wishlist_Model {
+    private String productId;
     private String productImage;
     private String productTitle;
     private long freeCoupon;
@@ -11,7 +12,8 @@ public class Wishlist_Model {
     private boolean cod;
 
 
-    public Wishlist_Model(String productImage, String productTitle, long freeCoupon, String rating, long totalRatings, String productPrice, String cuttedPrice, boolean cod) {
+    public Wishlist_Model(String productId,String productImage, String productTitle, long freeCoupon, String rating, long totalRatings, String productPrice, String cuttedPrice, boolean cod) {
+        this.productId=productId;
         this.productImage = productImage;
         this.productTitle = productTitle;
         this.freeCoupon = freeCoupon;
@@ -20,6 +22,15 @@ public class Wishlist_Model {
         this.productPrice = productPrice;
         this.cuttedPrice = cuttedPrice;
         this.cod = cod;
+    }
+
+
+    public String getProductId() {
+        return productId;
+    }
+
+    public void setProductId(String productId) {
+        this.productId = productId;
     }
 
     public String getProductImage() {

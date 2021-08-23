@@ -68,7 +68,7 @@ public class Sign_In_Fragment extends Fragment {
             @Override
             public void onClick(View v) {
                 FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-                transaction.setCustomAnimations(R.anim.slide_from_right, R.anim.slide_out_from_right);
+                transaction.setCustomAnimations(R.anim.slide_from_right, R.anim.slideout_from_left);
                 transaction.replace(R.id.register_framELayout, new Sign_Up_Fragment()).commit();
 
             }
